@@ -23,10 +23,7 @@ docker rm alpaca_engine
 docker run --name alpaca_engine -e POSTGRES_PASSWORD=admin -d -p 5432:5432 bitcoin_engine
 ```
 
-Run de script
-```bash
-docker exec -it alpaca_engine /bin/bash -c "source /usr/src/app/venv/bin/activate && python3 /usr/src/app/scripts/extract_file.py"
-```
+
 
 Debug logs
 ```bash
@@ -42,9 +39,18 @@ Activate venv
 ```bash
 docker exec -it alpaca_engine bash
 source /usr/src/app/venv/bin/activate
+--dbt version
 ```
+
+![DBT Version](assets/dbt_version.png)
 
 Insert bitcoin data
 ```bash
 docker exec -it alpaca_engine psql -U postgres -d bitcoin_engine -f /usr/src/app/queries/load_bitcoin_data.sql
+```
+
+
+Run de script manually
+```bash
+docker exec -it alpaca_engine /bin/bash -c "source /usr/src/app/venv/bin/activate && python3 /usr/src/app/scripts/extract_file.py"
 ```
