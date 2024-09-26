@@ -8,7 +8,7 @@ sudo systemctl enable docker
 
 Build the image
 ```bash
-docker build -t postgres-alpaca .
+docker build -t bitcoin_engine .
 ```
 
 Create network
@@ -20,12 +20,12 @@ Run container
 ```bash
 docker stop alpaca_engine
 docker rm alpaca_engine 
-docker run --name alpaca_engine -e POSTGRES_PASSWORD=admin -d -p 5432:5432 postgres-alpaca
+docker run --name alpaca_engine -e POSTGRES_PASSWORD=admin -d -p 5432:5432 bitcoin_engine
 ```
 
 Run de script
 ```bash
-docker exec -it alpaca_engine /bin/bash -c "source /usr/src/app/venv/bin/activate && python3 /usr/src/app/script.py"
+docker exec -it alpaca_engine /bin/bash -c "source /usr/src/app/venv/bin/activate && python3 /usr/src/app/scripts/extract_file.py"
 ```
 
 Debug logs
@@ -36,6 +36,7 @@ docker logs alpaca_engine
 Run in interactivate mode
 ```bash
 docker exec -it alpaca_engine psql -U postgres -d bitcoin_engine
+docker exec -it alpaca_engine psql -U postgres -d bitcoin_engine -h localhost -p 5432
 ```
 
 Activate venv

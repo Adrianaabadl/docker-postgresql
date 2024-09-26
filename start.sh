@@ -1,13 +1,26 @@
 #!/bin/bash
 
-# Iniciar PostgreSQL en segundo plano
-docker-entrypoint.sh postgres &
+# Iniciar el servicio de PostgreSQL
+/usr/local/bin/docker-entrypoint.sh postgres &
 
-# Esperar un momento para asegurarnos de que PostgreSQL esté listo para aceptar conexiones
-sleep 10
+sleep 5
 
-# Ejecutar el script de Python y redirigir los logs a stdout y stderr
-/usr/src/app/venv/bin/python /usr/src/app/script.py > /proc/1/fd/1 2>/proc/1/fd/2
+# Activar el entorno virtual
+source /usr/src/app/venv/bin/activate
 
-# Esperar a que el proceso de PostgreSQL termine
-wait
+# Ejecutar el script de descarga
+python3 /usr/src/app/scripts/download_script.py
+if [ $? -ne 0 ]; then
+    echo "Error en download_script.py"
+    exit 1
+fi
+
+# Ejecutar el script de extracción
+python3 /usr/src/app/scripts/extract_file.py
+if [ $? -ne 0 ]; then
+    echo "Error en extract_file.py"
+    exit 1
+fi
+
+# Mantener el contenedor en ejecución
+tail -f /dev/null
