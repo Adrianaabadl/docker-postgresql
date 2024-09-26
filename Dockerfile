@@ -9,6 +9,7 @@ RUN mkdir -p /usr/src/app/scripts
 
 # Copiar archivos de tu proyecto
 COPY ./sql/init.sql /docker-entrypoint-initdb.d/
+COPY ./sql/load_bitcoin_data.sql /usr/src/app/queries/
 COPY ./src/ /usr/src/app/scripts/
 COPY ./kaggle.json /root/.kaggle/kaggle.json
 COPY ./requirements.txt /usr/src/app/requirements.txt

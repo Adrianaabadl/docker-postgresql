@@ -33,10 +33,9 @@ Debug logs
 docker logs alpaca_engine
 ```
 
-Run in interactivate mode
+Open postgres terminal in interactivate mode
 ```bash
 docker exec -it alpaca_engine psql -U postgres -d bitcoin_engine
-docker exec -it alpaca_engine psql -U postgres -d bitcoin_engine -h localhost -p 5432
 ```
 
 Activate venv
@@ -45,4 +44,7 @@ docker exec -it alpaca_engine bash
 source /usr/src/app/venv/bin/activate
 ```
 
-
+Insert bitcoin data
+```bash
+docker exec -it alpaca_engine psql -U postgres -d bitcoin_engine -f /usr/src/app/queries/load_bitcoin_data.sql
+```
