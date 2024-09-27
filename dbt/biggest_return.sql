@@ -24,5 +24,5 @@ FROM
     hourly_returns
 ORDER BY
     total_return DESC
-LIMIT 1;
+LIMIT 1
 

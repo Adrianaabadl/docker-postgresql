@@ -26,6 +26,6 @@ FROM
     hourly_max_loss
 ORDER BY
     max_loss ASC
-LIMIT 1;
+LIMIT 1
 
 
