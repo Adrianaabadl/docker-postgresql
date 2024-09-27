@@ -108,15 +108,5 @@ psql -U postgres -d bitcoin_engine
 \dt
 ```
 
-Now let's answer the question 1:
-```bash
-select * from biggest_return ; # at 22:00
-``` 
-
-Finally, lets answer question 2:
-```bash
-select * from maximun_losses; ; # at 7:00
-```
-
-After running dbt, our tables have been successfully created and are ready to answer the questions, as shown in the image below:
+After running dbt, our tables have been successfully created and are ready to answer query tables, as shown in the image below:
 ![DBT Version](assets/business_questions.png)
