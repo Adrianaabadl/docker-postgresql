@@ -1,23 +1,31 @@
 {{ config(materialized='table') }}
 
-WITH losses AS (
-    SELECT 
-        EXTRACT(HOUR FROM open_time) AS hour,
-        (MIN(close) - MAX(open)) AS max_loss
-    FROM 
-        public.bitcoin_data
-    WHERE 
-        open_time >= '2023-01-01 00:00:00' AND open_time < '2023-12-31 23:59:59'
-    GROUP BY 
-        hour
+WITH hourly_max_loss AS (
+    SELECT
+        trade_hour,
+        MAX(max_close - min_open) AS max_loss
+    FROM (
+        SELECT
+            DATE(open_time) AS trade_date,
+            EXTRACT(HOUR FROM open_time) AS trade_hour,
+            MAX(close) AS max_close,
+            MIN(open) AS min_open
+        FROM
+            bitcoin_data
+        GROUP BY
+            trade_date, trade_hour
+    ) AS hourly_max_loss_data
+    GROUP BY
+        trade_hour
 )
 
-SELECT 
-    hour, 
-    max_loss,
-    RANK() OVER (ORDER BY max_loss ASC) AS rank
-FROM 
-    losses
-ORDER BY 
+SELECT
+    trade_hour,
+    max_loss
+FROM
+    hourly_max_loss
+ORDER BY
     max_loss ASC
-LIMIT 1
+LIMIT 1;
+
+

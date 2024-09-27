@@ -1,27 +1,28 @@
 {{ config(materialized='table') }}
 
-
-WITH returns AS (
-    SELECT 
-        EXTRACT(HOUR FROM open_time) AS hour,
-        (MAX(close) - MIN(open)) AS profit_loss
-    FROM 
-        public.bitcoin_data
-    WHERE 
-        open_time >= '2023-01-01 00:00:00' AND open_time < '2023-12-31 23:59:59'
-    GROUP BY 
-        hour
+WITH hourly_returns AS (
+    SELECT
+        trade_hour,
+        SUM((sell_price - buy_price) / buy_price) AS total_return
+    FROM (
+        SELECT
+            DATE(open_time) AS trade_date,
+            EXTRACT(HOUR FROM open_time) AS trade_hour,
+            FIRST_VALUE(open) OVER (PARTITION BY DATE(open_time), EXTRACT(HOUR FROM open_time) ORDER BY open_time) AS buy_price,
+            LAST_VALUE(close) OVER (PARTITION BY DATE(open_time), EXTRACT(HOUR FROM open_time) ORDER BY open_time RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS sell_price
+        FROM
+            bitcoin_data
+    ) AS hourly_returns_data
+    GROUP BY
+        trade_hour
 )
 
-SELECT 
-    hour, 
-    profit_loss,
-    RANK() OVER (ORDER BY profit_loss DESC) AS rank
-FROM 
-    returns
-ORDER BY 
-    profit_loss DESC
-LIMIT 1
-
-
+SELECT
+    trade_hour,
+    total_return
+FROM
+    hourly_returns
+ORDER BY
+    total_return DESC
+LIMIT 1;
 
