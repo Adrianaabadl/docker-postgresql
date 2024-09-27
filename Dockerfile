@@ -11,6 +11,8 @@ RUN mkdir -p /usr/src/app/scripts
 COPY ./profile/profiles.yml /profiles.yml
 COPY ./sql/init.sql /docker-entrypoint-initdb.d/
 COPY ./sql/load_bitcoin_data.sql /usr/src/app/queries/
+COPY ./dbt/biggest_return.sql /usr/src/app/queries/biggest_return.sql
+COPY ./dbt/maximun_losses.sql /usr/src/app/queries/maximun_losses.sql
 COPY ./src/ /usr/src/app/scripts/
 COPY ./kaggle.json /root/.kaggle/kaggle.json
 COPY ./requirements.txt /usr/src/app/requirements.txt
