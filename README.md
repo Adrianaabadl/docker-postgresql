@@ -1,4 +1,4 @@
-# Alpaca
+# Dbt-Postgres
 
 ## Docker Image
 In this step, we will accomplish the following tasks:
