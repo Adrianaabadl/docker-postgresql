@@ -18,11 +18,10 @@ docker network create alpaca_network
 
 Run container
 ```bash
-docker stop alpaca_engine
+docker stop alpaca_engine # in case you need to re build and need to stop the previous container
 docker rm alpaca_engine 
 docker run --name alpaca_engine -e POSTGRES_PASSWORD=admin -d -p 5432:5432 bitcoin_engine
 ```
-
 
 
 Debug logs
@@ -44,13 +43,31 @@ source /usr/src/app/venv/bin/activate
 
 ![DBT Version](assets/dbt_version.png)
 
-Insert bitcoin data
-```bash
-docker exec -it alpaca_engine psql -U postgres -d bitcoin_engine -f /usr/src/app/queries/load_bitcoin_data.sql
-```
 
 
-Run de script manually
+[Optional] Run de script manually
 ```bash
 docker exec -it alpaca_engine /bin/bash -c "source /usr/src/app/venv/bin/activate && python3 /usr/src/app/scripts/extract_file.py"
 ```
+
+## Run dbt commands
+
+Dbt debug
+```bash
+docker exec -it alpaca_engine bash
+source /usr/src/app/venv/bin/activate
+cd alpaca_bi
+dbt debug --profiles-dir /
+```
+
+![DBT Version](assets/dbt_debug.png)
+
+
+Dbt run
+```bash
+docker exec -it alpaca_engine bash
+source /usr/src/app/venv/bin/activate
+cd alpaca_bi
+dbt run --profiles-dir / # we specify the path of the profiles.yml file 
+```
+![DBT Version](assets/dbt_run_example.png)

@@ -2,13 +2,13 @@
 FROM postgres:latest
 
 # Instalar dependencias necesarias
-RUN apt-get update && apt-get install -y python3 python3-pip python3-venv file unzip
+RUN apt-get update && apt-get install -y python3 python3-pip python3-venv file unzip git
 
 # Crear el directorio para los scripts
 RUN mkdir -p /usr/src/app/scripts
 
 # Copiar archivos de tu proyecto
-COPY ./profile/profiles.yml /usr/src/app/profiles.yml
+COPY ./profile/profiles.yml /profiles.yml
 COPY ./sql/init.sql /docker-entrypoint-initdb.d/
 COPY ./sql/load_bitcoin_data.sql /usr/src/app/queries/
 COPY ./src/ /usr/src/app/scripts/
